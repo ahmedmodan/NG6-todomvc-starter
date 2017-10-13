@@ -1,4 +1,4 @@
-import angular from 'angular';
+import * as angular from 'angular';
 
 import todoTextInputComponent from './todoTextInput.component';
 import autofocus from './autofocus.directive';

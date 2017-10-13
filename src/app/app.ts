@@ -1,4 +1,4 @@
-import angular from 'angular';
+import * as angular from 'angular';
 import Components from './components/components';
 import services from './services/services';
 import 'normalize.css';

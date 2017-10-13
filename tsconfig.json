@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "sourceMap": true,
+        "noImplicitAny": false,
+        "noLib": false
+    },
+    "include": [
+        "app",
+        "types",
+        "node_modules/@types"
+    ],
+    "awesomeTypescriptLoaderOptions": {
+        "transpileOnly": true
+    }
+}

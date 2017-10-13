@@ -1,16 +1,15 @@
-'use strict';
 
-import gulp     from 'gulp';
-import webpack  from 'webpack';
-import path     from 'path';
-import sync     from 'run-sequence';
-import fs       from 'fs';
-import yargs    from 'yargs';
-import gutil    from 'gulp-util';
-import serve    from 'browser-sync';
-import webpackDevMiddelware from 'webpack-dev-middleware';
-import webpachHotMiddelware from 'webpack-hot-middleware';
-import colorsSupported      from 'supports-color';
+var gulp     = require('gulp');
+var webpack  = require('webpack');
+var path     = require('path');
+var sync     = require('run-sequence');
+var fs       = require('fs');
+var yargs    = require('yargs');
+var gutil    = require('gulp-util');
+var serve    = require('browser-sync');
+var webpackDevMiddelware = require('webpack-dev-middleware');
+var webpachHotMiddelware = require('webpack-hot-middleware');
+var colorsSupported      = require('supports-color');
 
 let root = 'src';
 
@@ -25,13 +24,13 @@ let resolveToComponents = (glob = '') => {
 
 // map of all paths
 let paths = {
-  js: resolveToComponents('**/*!(.spec.js).js'), // exclude spec files
+  js: resolveToComponents('**/*!(.spec.ts).s'), // exclude spec files
   styl: resolveToApp('**/*.styl'), // stylesheets
   html: [
     resolveToApp('**/*.html'),
     path.join(root, 'index.html')
   ],
-  entry: path.join(__dirname, root, 'app/app.js'),
+  entry: path.join(__dirname, root, 'app/app.ts'),
   output: root,
   blankTemplates: path.join(__dirname, 'generator', 'component/**/*.**')
 };

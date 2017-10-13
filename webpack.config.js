@@ -1,16 +1,30 @@
 var path    = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 
 module.exports = {
-  devtool: 'sourcemap',
+  devtool: 'source-map',
   entry: {},
+  resolve: {
+    extensions: ['.ts', '.js', '.less', '.css']
+  },
   module: {
-    loaders: [
-       { test: /\.js$/, exclude: [/app\/lib/, /node_modules/], loader: 'ng-annotate!babel' },
-       { test: /\.html$/, loader: 'raw' },
-       { test: /\.less$/, loader: 'style!css!less' },
-       { test: /\.css$/, loader: 'style!css' }
+    rules: [
+       {
+         test: /\.ts$/,
+         exclude: [/app\/lib/, /node_modules/],
+         use: [
+           'ng-annotate-loader',
+           'awesome-typescript-loader'
+         ]
+       },
+       { test: /\.html$/, use: 'raw-loader' },
+       {
+         test: /\.less$/,
+         use: ['style-loader', 'css-loader', 'less-loader']
+       },
+       { test: /\.css$/, use: ['style-loader', 'css-loader'] }
     ]
   },
   plugins: [
@@ -22,7 +36,6 @@ module.exports = {
       inject: 'body',
       hash: true
     }),
-
     // Automatically move all modules defined outside of application directory to vendor bundle.
     // If you are using more complicated project structure, consider to specify common chunks manually.
     new webpack.optimize.CommonsChunkPlugin({

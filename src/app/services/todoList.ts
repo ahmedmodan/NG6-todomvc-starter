@@ -1,4 +1,4 @@
-import cuid from 'cuid';
+import * as cuid from 'cuid';
 //import 'core-js/modules/es6.array.find';
 
 export default class TodoList {

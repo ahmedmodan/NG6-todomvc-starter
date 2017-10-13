@@ -4,10 +4,15 @@
   "description": "Starter for Angular + ES6 + (Webpack or JSPM)",
   "main": "index.js",
   "dependencies": {
+    "@types/redux": "^3.6.0",
+    "@types/redux-thunk": "^2.1.0",
     "angular": "^1.5.0",
     "core-js": "^2.0.0",
     "cuid": "^1.3.8",
+    "ng-redux": "^3.5.2",
     "normalize.css": "^3.0.3",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
     "todomvc-app-css": "^2.0.3"
   },
   "devDependencies": {

@@ -1,69 +1,61 @@
 
 export class TodoItemController {
-  constructor(todoList) {
+  public isEditing;
+  public onDelete;
+  public onEdit;
+  public todo;
+
+  constructor() {
     "ngInject";
-    this.todoList = todoList;
+
     this.isEditing = false;
   }
 
-  onDestroyClick() {
-    this.todoList.remove(this.task);
-  }
 
   onSave(description) {
     if (!description) {
-      this.todoList.remove(this.task);
+      this.onDelete({ id: this.todo.id });
     } else {
-      this.task.description = description;
+      this.onEdit({
+          id: this.todo.id,
+          text: description
+      });
     }
 
     this.isEditing = false;
   }
 
-  toggleStatus() {
-    this.todoList.toggleStatus(this.task);
-  }
-
-  /**
-   * This hack is needed due angular doesn't have one-way bindings (atleast for now)
-   * It allows not to override model value from inside this component.
-   *
-   * @returns {boolean}
-   */
-  get complete() {
-    return this.task.complete;
-  }
-
-  /**
-   * @param {boolean} val
-   */
-  set complete(val) {
-    // do nothing
+  $onChanges(changes) {
+    if (changes.todo) {
+      this.completed = changes.todo.currentValue.completed;
+    }
   }
 }
 
 export default {
   bindings: {
-    task: '=todo'
+    todo: '<',
+    onEdit: '&',
+    onDelete: '&',
+    onToggleTodo: '&'
   },
   template: `
-    <li ng-class="{'completed': vm.task.complete, 'editing': vm.isEditing}">
+    <li ng-class="{'completed': vm.todo.completed, 'editing': vm.isEditing}">
       <div class="view" ng-show="!vm.isEditing">
         <input
           class="toggle"
           type="checkbox"
-          ng-model="vm.complete"
-          ng-model-options="{getterSetter: true}"
-          ng-change="vm.toggleStatus()" />
+          ng-model="vm.completed"
+          ng-change="vm.onToggleTodo({id: vm.todo.id})" />
         </input>
-        <label ng-dblclick="vm.isEditing = true" class="todo-text" >{{vm.task.description}}</label>
-        <button class="destroy" ng-click="vm.onDestroyClick()"></button>
+        <label ng-dblclick="vm.isEditing = true" class="todo-text" >{{vm.todo.text}}</label>
+        <button class="destroy" ng-click="vm.onDelete({id: vm.todo.id})"></button>
       </div>
       <div class="edit-container" ng-if="vm.isEditing">
         <todo-text-input
           class="edit"
           on-save="vm.onSave(task)"
-          value="{{vm.task.description}}">
+          value="{{vm.todo.text}}">
         </todo-text-input>
       </div>
     </li>

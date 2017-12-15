@@ -22,7 +22,7 @@ export class BatchTogglerController {
 export default {
   bindings: {
     onToggle: '&',
-    todos: '='
+      todos: '<'
   },
   template: `
     <input class="toggle-all"

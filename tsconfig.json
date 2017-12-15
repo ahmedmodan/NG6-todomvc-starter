@@ -9,7 +9,7 @@
         "noLib": false
     },
     "include": [
-        "app",
+        "src/app",
         "types",
         "node_modules/@types"
     ],

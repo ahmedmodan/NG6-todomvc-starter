@@ -1,6 +1,10 @@
 import './todoTextInput.less';
 
 class TodoTextInputController {
+  public onSave;
+  public text;
+  public value;
+
   constructor() {
     this.text = this.value || '';
   }

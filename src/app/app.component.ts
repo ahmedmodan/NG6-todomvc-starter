@@ -1,40 +1,52 @@
+import * as TodoActions from './actions/todoActions';
 import './app.less';
+import {SHOW_ACTIVE, SHOW_COMPLETED} from './constants/todoConstants';
 
 export class TodoAppController {
   /**
    * @param {TodoList} todoList
    */
-  constructor(todoList) {
+  public showAll;
+  public showActive;
+  public showCompleted;
+  public todos;
+
+  constructor($ngRedux, $scope, todoList) {
     "ngInject";
-    this.todos = todoList;
+
+    let unsubscribe = $ngRedux.connect((state) => ({ todos: state.todos }), TodoActions)(this);
+    $scope.$on('$destroy', unsubscribe);
+    this.todoFilter = this.todoFilter.bind(this);
   }
 
-  onSave(task) {
-    if (!task) return;
-
-    this.todos.add(task);
+  todoFilter(todo) {
+    switch (this.todos.visibilityFilter) {
+        case SHOW_COMPLETED:
+          return todo.completed;
+        case SHOW_ACTIVE:
+          return !todo.completed;
+        default:
+          return true;
+    }
   }
 
   onFilter(state) {
     switch (state) {
       case 'all':
-        this.todos.showAll();
+        this.showAll();
         break;
       case 'active':
-        this.todos.showActive();
+        this.showActive();
         break;
       case 'completed':
-        this.todos.showCompleted();
+        this.showCompleted();
         break;
     }
   }
 
-  onToggleAll() {
-    this.todos.toggleAll();
-  }
 }
 
-export default {
+const AppComponent = {
   template: `
     <section class="todoapp">
       <section class="header">
@@ -42,20 +54,27 @@ export default {
         <header class="header-input">
           <todo-text-input
             placeholder="What needs to get done?"
-            on-save="$ctrl.onSave(task)">
+            on-save="$ctrl.addTodo(task)">
           </todo-text-input>
         </header>
       </section>
       <section class="main">
-        <todo-batch-toggle on-toggle="$ctrl.onToggleAll()" todos="$ctrl.todos.list" ng-if="$ctrl.todos.hasTasks()"></todo-batch-toggle>
+        <todo-batch-toggle on-toggle="$ctrl.completeAll()" todos="$ctrl.todos.todos"></todo-batch-toggle>
         <div class="todo-list">
-          <todo-item todo="todo" ng-repeat="todo in $ctrl.todos.filteredList"></todo-item>
+          <todo-item todo="todo" 
+                     on-edit="$ctrl.editTodo(id, text)" 
+                     on-delete="$ctrl.deleteTodo(id)"
+                     on-toggle-todo="$ctrl.toggleTodo(id)"
+                     ng-repeat="todo in $ctrl.todos.todos | filter:$ctrl.todoFilter track by todo.id">
+          </todo-item>
         </div>
       </section>
-      <todo-footer ng-if="$ctrl.todos.hasTasks()" todos="$ctrl.todos">
-        <todo-list-filter on-filter="$ctrl.onFilter(state)" filter-state="$ctrl.todos.filterState"></todo-list-filter>
+      <todo-footer ng-if="$ctrl.todos.todos.length > 0" clear-completed="$ctrl.clearCompleted()" todos="$ctrl.todos.todos">
+        <todo-list-filter on-filter="$ctrl.onFilter(state)" filter-state="$ctrl.todos.visibilityFilter"></todo-list-filter>
       </todo-footer>
     </section>
   `,
   controller: TodoAppController
 };
+
+export default AppComponent;

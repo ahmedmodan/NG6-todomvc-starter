@@ -1,22 +1,18 @@
 
-class TodoListFilter {
-  filter(state) {
-    this.onFilter({state});
-  }
-}
+
+import {SHOW_ACTIVE, SHOW_ALL, SHOW_COMPLETED} from '../constants/todoConstants';
 
 export default {
   bindings: {
     onFilter: '&',
-    filterState: '='
+    filterState: '<'
   },
   template: `
     <ul class="filters">
-      <li><a href ng-class="{selected: vm.filterState == 'all'}" ng-click="vm.filter('all')">All</a></li>
-      <li><a href ng-class="{selected: vm.filterState == 'active'}" ng-click="vm.filter('active')">Active</a></li>
-      <li><a href ng-class="{selected: vm.filterState == 'completed'}" ng-click="vm.filter('completed')">Completed</a></li>
+      <li><a href ng-class="{selected: vm.filterState == '${SHOW_ALL}'}" ng-click="vm.onFilter({state: 'all'})">All</a></li>
+      <li><a href ng-class="{selected: vm.filterState == '${SHOW_ACTIVE}'}" ng-click="vm.onFilter({state: 'active'})">Active</a></li>
+      <li><a href ng-class="{selected: vm.filterState == '${SHOW_COMPLETED}'}" ng-click="vm.onFilter({state: 'completed'})">Completed</a></li>
     </ul>
   `,
-  controller: TodoListFilter,
   controllerAs: 'vm'
 }
